@@ -77,23 +77,7 @@ Scheduler
 
 Architecture Overview
 =====================
-Controller Layer
-
-    ↓
-    
-Service Layer
-
-    ↓
-    
-Detection Engine
-
-    ↓
-    
-Repository Layer (JPA / Hibernate)
-
-    ↓
-    
-Database
+Controller Layer => Service Layer => Detection Engine => Repository Layer (JPA / Hibernate) => Database
 
 Core Components
 ===============
