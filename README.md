@@ -42,6 +42,7 @@ Status indicators:
 - OK
 - DEFACED
 - ERROR
+- 
 Real-time failed indicator count
 
 Defaced indicator listing
