@@ -183,6 +183,8 @@ Security Highlights
 
 Future Improvements (Optional Roadmap)
 ======================================
+- Full population of details in pages
+- Add more indicator types (Page Title, REGEXs etc)
 - Email/SMS alert integration
 - Multi-tenant support
 - Indicator regex support
