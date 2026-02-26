@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+    <div class="container-fluid">
+
+        <a class="navbar-brand fw-semibold" th:href="@{/default}">
+            <img th:src="@{/images/logo.png}"
+                 alt="Logo"
+                 width="50"
+                 height="50"
+                 class="d-inline-block align-text-top">
+        </a>
+
+        <!-- Mobile toggle -->
+        <button class="navbar-toggler" type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#mainNavbar"
+                aria-controls="mainNavbar"
+                aria-expanded="false"
+                aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Navbar content -->
+        <div class="collapse navbar-collapse" id="mainNavbar">
+
+            <!-- Left side -->
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/default}">Home</a>
+                </li>
+
+                <!-- Logged-in users -->
+                <li class="nav-item" sec:authorize="isAuthenticated()">
+                    <a class="nav-link" th:href="@{/change-password}">
+                        Change Password
+                    </a>
+                </li>
+
+                <!-- User dropdown -->
+                <li class="nav-item dropdown" sec:authorize="hasRole('USER')">
+                    <a class="nav-link dropdown-toggle"
+                       href="#"
+                       role="button"
+                       data-bs-toggle="dropdown"
+                       aria-expanded="false">
+                        Menu
+                    </a>
+
+                    <ul class="dropdown-menu dropdown-menu-dark shadow">
+                        <li>
+                            <a class="dropdown-item" th:href="@{/dashboard}">
+                                Dashboard
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" th:href="@{/logs}">
+                                Application Logs
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" th:href="@{/contacts}">
+                                Contacts
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!-- Admin dropdown -->
+                <li class="nav-item dropdown" sec:authorize="hasRole('ADMIN')">
+                    <a class="nav-link dropdown-toggle"
+                       href="#"
+                       role="button"
+                       data-bs-toggle="dropdown"
+                       aria-expanded="false">
+                        Admin
+                    </a>
+
+                    <ul class="dropdown-menu dropdown-menu-dark shadow">
+                        <li>
+                            <a class="dropdown-item" th:href="@{/dashboard}">
+                                Dashboard
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" th:href="@{/admin/users/new}">
+                                Create New User
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" th:href="@{/admin/users}">
+                                User List
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" th:href="@{/admin/users/deleted}">
+                                Deleted Users
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" th:href="@{/targets}">
+                                Manage Targets
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" th:href="@{/indicators}">
+                                Manage Indicators
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" th:href="@{/logs}">
+                                Application Logs
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" th:href="@{/contacts}">
+                                Contacts
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+
+            <!-- Right side -->
+            <ul class="navbar-nav ms-auto">
+
+                <li class="nav-item" sec:authorize="isAnonymous()">
+                    <a class="nav-link" th:href="@{/login}">
+                        Login
+                    </a>
+                </li>
+
+                <li class="nav-item" sec:authorize="isAuthenticated()">
+                    <a class="nav-link text-danger" th:href="@{/logout}">
+                        Logout
+                    </a>
+                </li>
+            </ul>
+
+        </div>
+    </div>
+</nav>
+
+</body>
+</html>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+
+    <!-- ========================= -->
+    <!-- Local file logging        -->
+    <!-- ========================= -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/defacement-app.log</file>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>logs/defacement-app-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <maxFileSize>10MB</maxFileSize>
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>1GB</totalSizeCap>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level [%thread] %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- ========================= -->
+    <!-- Console (dev visibility)  -->
+    <!-- ========================= -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level [%thread] %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- ========================= -->
+    <!-- QRadar TCP JSON Logging   -->
+    <!-- ========================= -->
+    <appender name="QRADAR" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+        <!--Define your QRadar Console to  Forward Logs-->
+        <destination>${QRADAR_HOST}:${QRADAR_PORT}</destination>
+
+        <!-- Reconnect in background, never blocks the app -->
+        <reconnectionDelay>10 seconds</reconnectionDelay>
+        <keepAliveDuration>5 minutes</keepAliveDuration>
+        <ringBufferSize>8192</ringBufferSize>
+
+        <!-- Connection timeout so startup is not hung waiting -->
+        <connectionTimeout>5000</connectionTimeout>
+        <writeTimeout>5000</writeTimeout>
+
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <customFields>{"app":"defacement-monitor","environment":"production"}</customFields>
+        </encoder>
+    </appender>
+
+    <!-- ========================= -->
+    <!-- Async wrapper for QRadar  -->
+    <!-- neverBlock = drop message if queue full, never block app thread  -->
+    <!-- discardingThreshold=0 = do NOT discard early at 20% remaining   -->
+    <!-- ========================= -->
+    <appender name="ASYNC_QRADAR" class="ch.qos.logback.classic.AsyncAppender">
+        <queueSize>10000</queueSize>
+        <neverBlock>true</neverBlock>
+        <discardingThreshold>0</discardingThreshold>
+        <appender-ref ref="QRADAR"/>
+    </appender>
+
+    <!-- ========================= -->
+    <!-- Root logger               -->
+    <!-- ========================= -->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE"/>
+        <appender-ref ref="ASYNC_QRADAR"/>
+    </root>
+
+</configuration>

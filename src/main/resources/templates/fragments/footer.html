@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
+
+<body>
+
+<footer th:fragment="footer"
+        class="mt-5 py-3 border-top text-center text-muted">
+
+    <div class="container">
+
+        <!-- Public -->
+        <a th:href="@{/}" class="me-3 text-decoration-none">Home</a>
+
+        <!-- Logged-in users -->
+        <span sec:authorize="isAuthenticated()">
+            |
+            <a th:href="@{/change-password}" class="mx-3 text-decoration-none">
+                Change Password
+            </a>
+        </span>
+
+        <span sec:authorize="isAuthenticated()">
+            |
+            <a th:href="@{/dashboard}" class="mx-3 text-decoration-none">
+                Dashboard
+            </a>
+        </span>
+
+        <!-- Contacts (public for now) -->
+        |
+        <a th:href="@{/contacts}" class="ms-3 text-decoration-none">
+            Contacts
+        </a>
+
+        <div class="mt-2">
+            <small>&copy; 2026 - Defacement Web App</small>
+        </div>
+
+    </div>
+
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Indicators</title>
+    <link rel="shortcut icon" th:href="@{/images/logo.png}">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+
+</head>
+<body class="bg-dark text-light">
+<!-- Flash messages -->
+<div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+    <span th:text="${success}"></span>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+
+<div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+    <span th:text="${error}"></span>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+
+<!-- Navbar -->
+<div th:replace="~{fragments/navbar :: body}"></div>
+
+<div class="d-flex justify-content-center align-items-start min-vh-100 content-wrapper">
+    <main class="page-container">
+
+        <h1 th:text="${indicator.id} != null ? 'Edit Indicator' : 'Add Indicator'"></h1>
+
+        <div class="d-flex justify-content-center align-items-start min-vh-100 bg-dark py-5">
+            <div class="card p-4 shadow-sm form-card">
+                <div class="card-body">
+                    <h4 class="card-title text-center mb-4"
+                        th:text="${indicator.id} != null ? 'Edit Indicator' : 'Add Indicator'"></h4>
+
+                    <div th:if="${error}" style="color: red;">
+                        <p th:text="${error}"></p>
+                    </div>
+
+                    <form th:action="@{/indicators/save}" th:object="${indicator}" method="post">
+                        <input type="hidden" th:field="*{id}" />
+                        <div class="mb-3">
+                            <label for="type" class="form-label">Type</label>
+
+                            <select id="type" th:field="*{type}" class="form-select">
+                                <option value="STRING"
+                                        th:selected="${indicator.type == T(soc.ucd.defacement.model.IndicatorType).STRING}">STRING</option>
+                                <option value="IMAGE_HASH"
+                                        th:selected="${indicator.type == T(soc.ucd.defacement.model.IndicatorType).IMAGE_HASH}">IMAGE_HASH</option>
+                                <option value="VIDEO_HASH"
+                                        th:selected="${indicator.type == T(soc.ucd.defacement.model.IndicatorType).VIDEO_HASH}">VIDEO_HASH</option>
+                            </select>
+                            <div class="text-danger" th:if="${#fields.hasErrors('type')}" th:errors="*{type}"></div>
+                        </div>
+
+                        <!-- IMAGE / VIDEO HASH fields -->
+                        <div id="hashFields" class="mb-3">
+                            <label for="filename" class="form-label">File Name / URL</label>
+                            <input id="filename" type="text" th:field="*{filename}" class="form-control" placeholder="Image/Video file name">
+
+                            <label for="hash" class="form-label mt-2">Hash</label>
+                            <input id="hash" type="text" th:field="*{hashValue}" class="form-control" placeholder="SHA256 or MD5 hash">
+                        </div>
+
+                        <!-- STRING value -->
+                        <div id="stringFields" class="mb-3">
+                            <label for="value" class="form-label">Value</label>
+                            <input type="text" class="form-control" id="value" placeholder="Enter indicator value"
+                                   th:field="*{value}">
+                            <div class="text-danger" th:if="${#fields.hasErrors('value')}" th:errors="*{value}"></div>
+                        </div>
+
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="enabled" th:field="*{enabled}">
+                            <label class="form-check-label" for="enabled">Enabled</label>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Description (optional)</label>
+                            <textarea class="form-control" id="description" rows="3"
+                                      th:field="*{description}"></textarea>
+                        </div>
+
+                        <div class="d-flex justify-content-center gap-2 mt-4">
+                            <button type="submit" class="btn btn-success">Save</button>
+                            <a th:href="@{/indicators}" class="btn btn-secondary ms-2">Cancel</a>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Include Footer -->
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/js/autohideflashmessagesafterfiveseconds.js}"></script>
+<script th:src="@{/js/indicatortypecontroller.js}"></script>
+
+</body>
+</html>
