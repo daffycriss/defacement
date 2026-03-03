@@ -5,7 +5,6 @@ import defacement.model.Alert;
 import defacement.model.MonitorTarget;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-@EnableJpaRepositories
 public interface AlertRepository extends JpaRepository<Alert, Long> {
 
     // Existing method

@@ -34,7 +34,7 @@
     <!-- ========================= -->
     <appender name="QRADAR" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
         <!--Define your QRadar Console to  Forward Logs-->
-        <destination>${QRADAR_HOST}:${QRADAR_PORT}</destination>
+        <destination>${QRADAR_HOST:-localhost}:${QRADAR_PORT:-5000}</destination>
 
         <!-- Reconnect in background, never blocks the app -->
         <reconnectionDelay>10 seconds</reconnectionDelay>

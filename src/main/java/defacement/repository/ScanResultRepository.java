@@ -9,7 +9,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import java.util.List;
 
-@EnableJpaRepositories
 public interface ScanResultRepository
         extends JpaRepository<ScanResult, Long> {
 

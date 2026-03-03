@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import java.util.Optional;
 
-@EnableJpaRepositories
 public interface ScanJobRepository extends JpaRepository<ScanJob, Long> {
 
     Optional<ScanJob> findTopByTargetOrderByStartedAtDesc(MonitorTarget target);

@@ -10,7 +10,6 @@ import defacement.model.TargetIndicator;
 
 import java.util.List;
 
-@EnableJpaRepositories
 public interface TargetIndicatorRepository
         extends JpaRepository<TargetIndicator, Long> {
 

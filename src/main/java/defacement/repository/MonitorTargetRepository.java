@@ -6,7 +6,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import java.util.List;
 
-@EnableJpaRepositories
 public interface MonitorTargetRepository extends JpaRepository<MonitorTarget, Long> {
 
     List<MonitorTarget> findByDeletedAtIsNull();
