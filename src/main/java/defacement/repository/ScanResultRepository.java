@@ -5,9 +5,11 @@ import org.springframework.data.jpa.repository.Query;
 import defacement.model.DefacementIndicator;
 import defacement.model.ScanJob;
 import defacement.model.ScanResult;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import java.util.List;
 
+@EnableJpaRepositories
 public interface ScanResultRepository
         extends JpaRepository<ScanResult, Long> {
 
