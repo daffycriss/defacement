@@ -15,6 +15,11 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(
+                            "/js/**",
+                            "/images/**",
+                            "/favicon.ico"
+                        ).permitAll()
                         .requestMatchers("/login", "/error", "/access-denied", "/contacts").permitAll()
                         .requestMatchers("/default").authenticated()
                         .requestMatchers("/change-password").authenticated()
