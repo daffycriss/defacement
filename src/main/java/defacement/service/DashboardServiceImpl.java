@@ -1,5 +1,8 @@
 package defacement.service;
 
+import defacement.model.DefacementIndicator;
+import defacement.repository.DefacementIndicatorRepository;
+import defacement.view.ActiveIndicatorView;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +24,7 @@ public class DashboardServiceImpl implements DashboardService {
     private final MonitorTargetRepository targetRepository;
     private final ScanJobRepository scanJobRepository;
     private final ScanResultRepository scanResultRepository;
+    private final DefacementIndicatorRepository indicatorRepository;
 
     @Override
     @Transactional(readOnly = true)
@@ -72,6 +76,28 @@ public class DashboardServiceImpl implements DashboardService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
+    public List<ActiveIndicatorView> getActiveIndicators() {
+
+        return indicatorRepository.findByEnabledTrue()
+                .stream()
+                .map(indicator -> new ActiveIndicatorView(
+                        indicator.getId(),
+                        indicator.getType(),
+                        indicator.getValue(),
+                        indicator.getFilename(),
+                        indicator.getHashValue(),
+                        indicator.getDescription(),
+                        indicator.getCreatedBy() != null
+                                ? indicator.getCreatedBy().getUsername()
+                                : "-",
+                        indicator.getTargetMappings()
+                                .stream()
+                                .map(mapping -> mapping.getTarget().getName())
+                                .toList()
+                ))
+                .toList();
+    }
 
     @Override
     public DashboardSummaryView getDashboardSummary() {
@@ -82,7 +108,8 @@ public class DashboardServiceImpl implements DashboardService {
         long healthy = 0;
         long defaced = 0;
         long failed = 0;
-        long activeAlerts = 0;
+        //long activeAlerts = 0;
+        long totalIndicators = indicatorRepository.findByEnabledTrue().size();
 
         for (MonitorTarget target : targets) {
 
@@ -96,7 +123,7 @@ public class DashboardServiceImpl implements DashboardService {
                 case "SUCCESS" -> healthy++;
                 case "DEFACED" -> {
                     defaced++;
-                    activeAlerts++;
+                    //activeAlerts++;
                 }
                 case "FAILED" -> failed++;
             }
@@ -107,7 +134,8 @@ public class DashboardServiceImpl implements DashboardService {
                 healthy,
                 defaced,
                 failed,
-                activeAlerts
+                //activeAlerts
+                totalIndicators
         );
     }
 

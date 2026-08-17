@@ -69,6 +69,14 @@ public class DashboardController {
         return "defaced-indicators"; // Thymeleaf template for full list
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
+    @GetMapping("/active-indicators")
+    public String showActiveIndicators(Model model) {
+        System.out.println(">>> ACTIVE INDICATORS CONTROLLER CALLED <<<");
+        model.addAttribute("indicators", dashboardService.getActiveIndicators());
+        return "/active-indicators";
+    }
+
     @GetMapping("/api/defaced-count")
     @ResponseBody
     public Map<String, Object> getDefacedIndicatorsCount() {

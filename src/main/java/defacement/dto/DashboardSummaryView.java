@@ -11,5 +11,6 @@ public class DashboardSummaryView {
     private long healthyTargets;
     private long defacedTargets;
     private long failedTargets;
-    private long activeAlerts;
+    //private long activeAlerts;
+    private long totalIndicators;
 }

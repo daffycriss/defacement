@@ -18,6 +18,7 @@ public interface ScanResultRepository
 
     // Fetch all ScanResults that are DEFACED
     @Query("SELECT r FROM ScanResult r WHERE r.status = 'DEFACED'")
+
     List<ScanResult> findAllDefacedScanResults();
 
     List<ScanResult> findAllByStatus(String status);

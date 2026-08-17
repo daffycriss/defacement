@@ -24,8 +24,13 @@ public class DefacementIndicatorService {
     private final ScanResultRepository scanResultRepository;
     private final TargetIndicatorRepository targetIndicatorRepository;
 
+//    public List<DefacementIndicator> findAll() {
+//        return repository.findAll();
+//    }
+
+    @Transactional(readOnly = true)
     public List<DefacementIndicator> findAll() {
-        return repository.findAll();
+        return repository.findAllWithCreatedBy();
     }
 
     public List<DefacementIndicator> findEnabled() {
@@ -78,18 +83,24 @@ public class DefacementIndicatorService {
         return created;
     }
 
+    @Transactional
     public void delete(Long id) {
+
         DefacementIndicator indicator = repository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid indicator id"));
+                .orElseThrow(() ->
+                        new IllegalArgumentException("Invalid indicator id"));
 
         if (!indicator.getTargetMappings().isEmpty()) {
-            logger.warn("Attempted to delete indicator [{}] but it is assigned to targets",
-                    indicator.getValue());
-            throw new IllegalStateException("Cannot delete indicator assigned to targets");
+            throw new IllegalStateException(
+                    "This indicator is assigned to a target and cannot be deleted. Disable it instead.");
+        }
+
+        if (scanResultRepository.existsByIndicator(indicator)) {
+            throw new IllegalStateException(
+                    "This indicator has scan history and cannot be deleted. Disable it instead.");
         }
 
         repository.delete(indicator);
-        logger.info("Indicator [{}] of type [{}] deleted", indicator.getValue(), indicator.getType());
     }
 
     public boolean hasScanResults(DefacementIndicator indicator) {

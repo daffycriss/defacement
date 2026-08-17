@@ -43,14 +43,35 @@
                         <div class="mb-3">
                             <label for="type" class="form-label">Type</label>
 
+<!--                            <select id="type" th:field="*{type}" class="form-select">-->
+<!--                                <option value="STRING"-->
+<!--                                        th:selected="${indicator.type == T(soc.ucd.defacement.model.IndicatorType).STRING}">STRING</option>-->
+<!--                                <option value="IMAGE_HASH"-->
+<!--                                        th:selected="${indicator.type == T(soc.ucd.defacement.model.IndicatorType).IMAGE_HASH}">IMAGE_HASH</option>-->
+<!--                                <option value="VIDEO_HASH"-->
+<!--                                        th:selected="${indicator.type == T(soc.ucd.defacement.model.IndicatorType).VIDEO_HASH}">VIDEO_HASH</option>-->
+<!--                            </select>-->
                             <select id="type" th:field="*{type}" class="form-select">
                                 <option value="STRING"
-                                        th:selected="${indicator.type == T(soc.ucd.defacement.model.IndicatorType).STRING}">STRING</option>
+                                        th:selected="${indicator.type != null and indicator.type.name() == 'STRING'}">
+                                    STRING
+                                </option>
+
                                 <option value="IMAGE_HASH"
-                                        th:selected="${indicator.type == T(soc.ucd.defacement.model.IndicatorType).IMAGE_HASH}">IMAGE_HASH</option>
+                                        th:selected="${indicator.type != null and indicator.type.name() == 'IMAGE_HASH'}">
+                                    IMAGE_HASH
+                                </option>
+
                                 <option value="VIDEO_HASH"
-                                        th:selected="${indicator.type == T(soc.ucd.defacement.model.IndicatorType).VIDEO_HASH}">VIDEO_HASH</option>
+                                        th:selected="${indicator.type != null and indicator.type.name() == 'VIDEO_HASH'}">
+                                    VIDEO_HASH
+                                </option>
                             </select>
+<!--                            <select id="type" th:field="*{type}" class="form-select">-->
+<!--                                <option value="STRING">STRING</option>-->
+<!--                                <option value="IMAGE_HASH">IMAGE_HASH</option>-->
+<!--                                <option value="VIDEO_HASH">VIDEO_HASH</option>-->
+<!--                            </select>-->
                             <div class="text-danger" th:if="${#fields.hasErrors('type')}" th:errors="*{type}"></div>
                         </div>
 

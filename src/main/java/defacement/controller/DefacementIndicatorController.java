@@ -8,11 +8,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import defacement.service.UserService;
 
 import defacement.model.DefacementIndicator;
 import defacement.model.IndicatorType;
 import defacement.model.User;
 import defacement.service.DefacementIndicatorService;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/indicators")
@@ -21,6 +23,7 @@ import defacement.service.DefacementIndicatorService;
 public class DefacementIndicatorController {
 
     private final DefacementIndicatorService indicatorService;
+    private final UserService userService;
 
     @GetMapping
     public String list(Model model) {
@@ -38,7 +41,7 @@ public class DefacementIndicatorController {
     @PostMapping("/save")
     public String save(@Valid @ModelAttribute("indicator") DefacementIndicator indicator,
                        BindingResult result,
-                       @AuthenticationPrincipal User user,
+                       //@AuthenticationPrincipal User user,
                        Model model) {
 
         if (indicator.getType() == IndicatorType.STRING &&
@@ -59,8 +62,12 @@ public class DefacementIndicatorController {
             return "indicators-form";
         }
 
+//        if (indicator.getId() == null) {
+//            indicator.setCreatedBy(user);
+//        }
+
         if (indicator.getId() == null) {
-            indicator.setCreatedBy(user);
+            indicator.setCreatedBy(userService.getCurrentUser());
         }
 
         indicatorService.save(indicator);
@@ -95,9 +102,37 @@ public class DefacementIndicatorController {
         return "redirect:/indicators";
     }
 
+//    @PostMapping("/{id}/delete")
+//    public String deleteIndicator(@PathVariable Long id) {
+//        indicatorService.delete(id);
+//        return "redirect:/indicators";
+//    }
+
     @PostMapping("/{id}/delete")
-    public String deleteIndicator(@PathVariable Long id) {
-        indicatorService.deleteById(id);
+    public String deleteIndicator(
+            @PathVariable Long id,
+            RedirectAttributes redirectAttributes) {
+
+        try {
+            indicatorService.delete(id);
+
+            redirectAttributes.addFlashAttribute(
+                    "success",
+                    "Indicator deleted successfully.");
+
+        } catch (IllegalStateException e) {
+
+            redirectAttributes.addFlashAttribute(
+                    "error",
+                    e.getMessage());
+
+        } catch (IllegalArgumentException e) {
+
+            redirectAttributes.addFlashAttribute(
+                    "error",
+                    "Indicator not found.");
+        }
+
         return "redirect:/indicators";
     }
 }

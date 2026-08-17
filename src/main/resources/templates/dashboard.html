@@ -79,13 +79,25 @@
                         </div>
 
                         <div class="col-md-2">
-                            <div class="card text-bg-dark text-center">
-                                <div class="card-body">
-                                    <h5>Active Alerts</h5>
-                                    <h3 th:text="${summary.activeAlerts}"></h3>
+                            <a th:href="@{/dashboard/active-indicators}"
+                               class="text-decoration-none">
+                                <div class="card text-bg-dark text-center hover-scale">
+                                    <div class="card-body">
+                                        <h5>Active Indicators</h5>
+                                        <h3 th:text="${summary.totalIndicators}"></h3>
+                                    </div>
                                 </div>
-                            </div>
+                            </a>
                         </div>
+
+<!--                        <div class="col-md-2">-->
+<!--                            <div class="card text-bg-dark text-center">-->
+<!--                                <div class="card-body">-->
+<!--                                    <h5>Active Alerts</h5>-->
+<!--                                    <h3 th:text="${summary.activeAlerts}"></h3>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
                     </div>
                     <table class="table table-bordered table-striped">
                         <thead class="table-dark">
